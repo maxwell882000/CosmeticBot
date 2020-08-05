@@ -1,5 +1,5 @@
 {
-    "welcome": "Здравствуйте!\nДля начала выберите язык",
+    "welcome": "Здравствуйте!\nДля начала выберите язык \n\n Iltimos tilni tanlang",
     "welcome.say_me_language": "Выберите язык ниже.",
     "registration.not_allowed": "Извините, но я не могу опознать вас",
     "registration.welcome": "Добро пожаловать, <b>{}</b>! Пожалуйста, выберите язык",

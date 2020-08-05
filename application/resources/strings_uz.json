@@ -1,6 +1,7 @@
 {
-"   welcome": "Здравствуйте!\nДля начала выберите языкUZ",
-    "welcome.say_me_language": "Выберите язык ниже.UZ",
+    "welcome.say_me_language": "Tilni tanlang",
+    "registration.request.welcome": "Xush kelibsiz! Agar siz ro'yxatdan o'tmoqchi bo'lsangiz, aloqa ma'lumotlarini qoldirishingiz kerak!\n\nAvval ismingizni yozing",
+    "registration.request.phone_number": "Raqamingiz nechi?\nSin nomeringizni <b>998 ** *** ** **</b> formatida yuborishingiz yoki knopkani \"\uD83D\uDCF1 Mening raqamim\" bosishingiz mumkun",
     "language.russian": "🇷🇺 Русский",
     "language.uzbek": "🇺🇿 Узбекский",
     "welcome.user_name": "O'zingizni tanishtiring. Ismingizni yuboring",

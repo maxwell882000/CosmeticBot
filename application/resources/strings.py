@@ -39,13 +39,13 @@ def from_cart_items(cart_items, language, total) -> str:
         counter += 1
         if language == 'uz':
             dish_item = cart_str_item.format(counter=counter,
-                                             name=cart_item.dish.get_full_name_uz(),
+                                             name=cart_item.dish.description_uz,
                                              count=cart_item.count,
                                              price=_format_number(cart_item.dish.price * currency_value),
                                              sum=_format_number(cart_item.count * cart_item.dish.price * currency_value))
         else:
             dish_item = cart_str_item.format(counter=counter,
-                                             name=cart_item.dish.get_full_name(),
+                                             name=cart_item.dish.description,
                                              count=cart_item.count,
                                              price=_format_number(cart_item.dish.price * currency_value),
                                              sum=_format_number(cart_item.count * cart_item.dish.price * currency_value))

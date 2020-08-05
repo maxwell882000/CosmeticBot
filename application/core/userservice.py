@@ -1,5 +1,5 @@
 from application import db
-from application.core.models import User, UserAdmin, UserDish, Dish, RegistrationRequest
+from application.core.models import User, UserAdmin, UserDish, Dish, RegistrationRequest, CartItem
 from application.utils import date
 from . import dishservice
 from datetime import datetime, timedelta
@@ -160,9 +160,9 @@ def add_dish_to_cart(user_id: int, dish: Dish, count: int):
 def remove_dish_from_user_cart(user_id: int, dish_name: str, language: str) -> bool:
     user = get_user_by_telegram_id(user_id)
     if language == 'uz':
-        dish = user.cart.filter(Dish.name_uz == dish_name).first()
+        dish = user.cart.filter(CartItem.dish.has(description_uz=dish_name)).first()
     else:
-        dish = user.cart.filter(Dish.name == dish_name).first()
+        dish = user.cart.filter(CartItem.dish.has(description=dish_name)).first()
     if not dish:
         return False
     user.remove_dish_from_cart(dish)
