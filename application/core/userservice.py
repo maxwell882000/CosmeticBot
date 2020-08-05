@@ -159,10 +159,15 @@ def add_dish_to_cart(user_id: int, dish: Dish, count: int):
 
 def remove_dish_from_user_cart(user_id: int, dish_name: str, language: str) -> bool:
     user = get_user_by_telegram_id(user_id)
-    if language == 'uz':
-        dish = user.cart.filter(CartItem.dish.has(description_uz=dish_name)).first()
-    else:
-        dish = user.cart.filter(CartItem.dish.has(description=dish_name)).first()
+    for cart_item cart_items:
+        if language == 'uz':
+            if cart_item.dish.description_uz == dish_name:
+                dish = cart_item
+                break
+        else:
+            if cart_item.dish.description == dish_name:
+                dish = cart_item
+                break
     if not dish:
         return False
     user.remove_dish_from_cart(dish)

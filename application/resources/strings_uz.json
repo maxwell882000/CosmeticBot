@@ -27,6 +27,7 @@
     "cart.empty": "Sizning savatingiz bo'sh, buyurtma berish uchun mahsulot tanlang",
     "cart.summary": "Umumiy",
     "cart.clear": "\uD83D\uDD04 Tozalash",
+    "cart.error": "Quyidagi amalni tanlang",
     "cart.help": "❌ <b> Mahsulot nomi</b> - savatdan o'chirish\n<b>\uD83D\uDD04 Tozalash»</b> - savatni butunlay bo'shatish",
     "order.shipping_method": "Buyurtmani o'zingiz <b>olib keting</b> yoki tanlang <b>yetkazib berishni</b>",
     "order.delivery": "\uD83D\uDE96 Yetkazib berish",
