@@ -116,7 +116,7 @@ class DishCategory(db.Model, BaseNestedSets):
             if self.parent.parent:
                 name = self.parent.parent.name + ' ' + name
                 if self.parent.parent.parent:
-                    name = self.parent.parent.parentname + ' ' + name
+                    name = self.parent.parent.parent.name + ' ' + name
         return name
 
     def get_nested_names_uz(self):
@@ -150,10 +150,8 @@ class Dish(db.Model):
 
     def get_full_name(self):
         return self.category.get_nested_names() + ' ' + self.name
-
     def get_full_name_uz(self):
         return self.category.get_nested_names_uz() + ' ' + self.name_uz
-
 
 class Order(db.Model):
     """

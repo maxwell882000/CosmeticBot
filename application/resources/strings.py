@@ -32,20 +32,24 @@ def from_cart_items(cart_items, language, total) -> str:
     cart_contains = ''
     cart_contains += '<b>{}</b>:'.format(get_string('catalog.cart', language))
     cart_contains += '\n\n'
-    cart_str_item = "<b>{name}</b>\n{count} x {price} = {sum}"
+    cart_str_item = "<b>{counter}. {name}</b>\n{count} x {price} = {sum}"
     currency_value = settings.get_currency_value()
+    counter = 0
     for cart_item in cart_items:
+        counter += 1
         if language == 'uz':
-            dish_item = cart_str_item.format(name=cart_item.dish.get_full_name_uz(),
+            dish_item = cart_str_item.format(counter=counter,
+                                             name=cart_item.dish.get_full_name_uz(),
                                              count=cart_item.count,
                                              price=_format_number(cart_item.dish.price * currency_value),
                                              sum=_format_number(cart_item.count * cart_item.dish.price * currency_value))
         else:
-            dish_item = cart_str_item.format(name=cart_item.dish.get_full_name(),
+            dish_item = cart_str_item.format(counter=counter,
+                                             name=cart_item.dish.get_full_name(),
                                              count=cart_item.count,
                                              price=_format_number(cart_item.dish.price * currency_value),
                                              sum=_format_number(cart_item.count * cart_item.dish.price * currency_value))
-        dish_item += " {}\n".format(get_string('sum', language))
+        dish_item += " {}\n\n".format(get_string('sum', language))
         cart_contains += dish_item
     cart_contains += "\n<b>{}</b>: {} {}".format(get_string('cart.summary', language),
                                                  _format_number(total * currency_value),
@@ -56,11 +60,6 @@ def from_cart_items(cart_items, language, total) -> str:
 
 def from_dish(dish: Dish, language: str) -> str:
     dish_content = ""
-    if language == 'uz':
-        dish_content += dish.get_full_name_uz()
-    else:
-        dish_content += dish.get_full_name()
-    dish_content += '\n\n'
     if language == 'uz':
         if dish.description_uz:
             dish_content += dish.description_uz
@@ -107,19 +106,22 @@ def from_order(order: Order, language: str, total: int) -> str:
         order_content += '<b>{address}:</b> {address_value}'.format(address=get_string('address', language),
                                                                     address_value=order.location.address)
     order_content += '\n\n'
-    order_item_tmpl = '<b>{name}</b>\n{count} x {price} = {sum} {sum_str}\n'
+    order_item_tmpl = '<b>{counter}. {name}</b>\n{count} x {price} = {sum} {sum_str}\n'
+    counter = 0
     for order_item in order.order_items.all():
+        counter += 1
         dish = order_item.dish
         if language == 'uz':
             dish_name = dish.get_full_name_uz()
         else:
             dish_name = dish.get_full_name()
-        order_item_str = order_item_tmpl.format(name=dish_name,
+        order_item_str = order_item_tmpl.format(counter=counter,
+                                                name=dish_name,
                                                 count=order_item.count,
                                                 price=_format_number(dish.price * currency_value),
                                                 sum=_format_number(order_item.count * dish.price * currency_value),
                                                 sum_str=get_string('sum', language))
-        order_content += order_item_str
+        order_content += order_item_str + '\n'
     order_content += "<b>{}</b>: {} {}".format(get_string('cart.summary', language),
                                                _format_number(total * currency_value),
                                                get_string('sum', language))
@@ -148,8 +150,8 @@ def from_order_notification(order: Order, total_sum):
         order_content += '<b>Адрес:</b> {}'.format(order.address_txt)
     elif order.location:
         order_content += '<b>Адрес:</b> {}'.format(order.location.address)
-    order_content += '\n\n'
-    order_item_tmpl = '    <i>{name}</i>\n    {count} x {price} = {sum} сум\n'
+    order_content += '\n\n\U0001F6D2 Корзина:\n'
+    order_item_tmpl = '<b>{counter}. {name}</b>\n    {count} x {price} = {sum} сум\n'
     order_items = order.order_items.all()
     grouped_order_items = {}
     categories_list = [oi.dish.category for oi in order_items]
@@ -157,15 +159,17 @@ def from_order_notification(order: Order, total_sum):
     for category in categories_list:
         order_items_by_category = list(filter(lambda oi: oi.dish.category_id == category.id, order_items))
         grouped_order_items[category.name] = order_items_by_category
-    for category, ois in grouped_order_items.items():
-        group_content = '<b>%s</b>:\n' % category
-        for order_item in ois:
-            group_content += order_item_tmpl.format(name=order_item.dish.get_full_name(),
-                                                    count=order_item.count,
-                                                    price=_format_number(order_item.dish.price),
-                                                    sum=_format_number(order_item.dish.price * order_item.count))
+    counter = 0
+    for oi in order_items:
+        counter += 1
+        group_content = '\n'
+        group_content += order_item_tmpl.format(counter=counter,
+                                               name=oi.dish.description,
+                                               count=oi.count,
+                                               price=_format_number(oi.dish.price),
+                                               sum=_format_number(oi.dish.price * oi.count))
         order_content += group_content
-    order_content += "<b>Общая стоимость заказа</b>: {} сум".format(_format_number(order.total_amount))
+    order_content += "\n<b>Итого: </b>: {} сум".format(_format_number(order.total_amount))
     if order.delivery_price:
         order_content += '\n\n'
         order_content += '<b>Стоимость доставки</b>: {} сум'.format(_format_number(order.delivery_price))

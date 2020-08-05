@@ -1,4 +1,3 @@
-
 {% extends 'layouts/admin.html' %}
 {% block header %}Клиенты{% endblock %}
 {% block description %}Клиенты Telegram Bot{% endblock %}
@@ -63,7 +62,7 @@
                                         {% endif %}
                                     </td>
                                     <td>
-                                        <a href="{{ url_for('admin.remove_user', user_id=user.id) }}" onclick="return confirm('Вы уверены?')" class="btn btn-danger btn-flat"><i class="fas fa-trash"></i></a>
+                                        <a href="{{ url_for('admin.edit_user', user_id=user.id) }}" class="btn btn-flat bg-ora<a href="{{ url_for('admin.remove_user', user_id=user.id) }}" onclick="return confirm('Вы уверены?')" class="btn btn-danger btn-flat"><i class="fas fa-trash"></i></a>
                                     </td>
                                 </tr>
                             {% endfor %}

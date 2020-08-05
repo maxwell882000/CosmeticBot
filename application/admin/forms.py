@@ -20,7 +20,7 @@ class CategoryForm(FlaskForm):
         self.name_ru.data = category.name
         self.name_uz.data = category.name_uz
         if category.parent:
-            self.parent = category.parent_id
+            self.parent.data = category.parent_id
 
 
 class DishForm(FlaskForm):

@@ -164,7 +164,7 @@ def catalog_processor(message: Message, **kwargs):
         orders.order_processor(message)
     else:
         category_name = message.text
-        category = dishservice.get_category_by_name(category_name, language)
+        category = dishservice.get_category_by_name(category_name, language, kwargs.get('parent_category', None))
         if not category:
             error()
             return
