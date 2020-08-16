@@ -41,6 +41,7 @@
                             <tr>
                                 <th>№</th>
                                 <th>Название</th>
+                                <th>Количество (Шт)</th>
                                 <th>Категория</th>
                                 <th>Действия</th>
                             </tr>
@@ -53,6 +54,9 @@
                                     </td>
                                     <td>
                                         {{ dish.name }} | {{ dish.name_uz }}
+                                    </td>
+                                    <td>
+                                        {{ dish.quantity }}
                                     </td>
                                     <td>
                                         {{ dish.category.name }} | {{ dish.category.name_uz }}

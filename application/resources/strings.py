@@ -105,6 +105,7 @@ def from_order(order: Order, language: str, total: int) -> str:
     elif order.location:
         order_content += '<b>{address}:</b> {address_value}'.format(address=get_string('address', language),
                                                                     address_value=order.location.address)
+        order_content += '<b>Дистанция:</b> {}'.format(order.distance)
     order_content += '\n\n'
     order_item_tmpl = '<b>{counter}. {name}</b>\n{count} x {price} = {sum} {sum_str}\n'
     counter = 0

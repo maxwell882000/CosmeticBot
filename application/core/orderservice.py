@@ -121,9 +121,12 @@ def set_address_by_map_location(user_id: int, map_location: tuple) -> bool:
         return False
     current_order = get_current_order_by_user(user_id)
     order_location = Location(latitude=latitude, longitude=longitude, address=address)
+    distance = geocode.distance_between_two_points(map_location, settings.get_cafe_coordinates())
     current_order.location = order_location
+    current_order.distance = ' '.join(distance)
     db.session.commit()
     return True
+
 
 
 def set_phone_number(user_id: int, phone_number: str) -> Order:

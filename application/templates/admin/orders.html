@@ -22,7 +22,9 @@
                                 <th>Способ оплаты</th>
                                 <th>Стоимость доставки, $</th>
                                 <th>Стоимость заказа, $</th>
+                                <th>Дистанция</th>
                                 <th>Действия</th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -52,6 +54,9 @@
                                         {% else %}
                                             {{ order|total_order_sum|price }}
                                         {% endif %}
+                                    </td>
+                                    <td>
+                                        {{ order.distance }}
                                     </td>
                                     <td>
                                         <a href="{{ url_for('admin.order', order_id=order.id) }}"

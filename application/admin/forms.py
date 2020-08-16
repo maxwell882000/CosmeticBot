@@ -36,7 +36,7 @@ class DishForm(FlaskForm):
     delete_image = BooleanField('Удалить изображение')
     show_usd = BooleanField('Показывать цену в долларах')
     submit = SubmitField('Сохранить')
-
+    quantity = StringField('Количество', validators=[DataRequired('Укажите количество')])
     def fill_from_object(self, dish: Dish):
         self.name_ru.data = dish.name
         self.name_uz.data = dish.name_uz
@@ -45,7 +45,7 @@ class DishForm(FlaskForm):
         self.category.data = dish.category_id
         self.price.data = dish.price
         self.show_usd.data = dish.show_usd
-
+        self.quantity.data = dish.quantity
     def validate_price(self, field):
         try:
             float(field.data)
@@ -62,7 +62,6 @@ class AdministratorEmailForm(FlaskForm):
 
     def fill_from_current_user(self):
         self.email.data = current_user.email
-
     def validate_password(self, field):
         if not current_user.check_password(field.data):
             raise ValidationError('Указан неверный пароль')

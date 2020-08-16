@@ -79,11 +79,20 @@
                                     {{ form.image }}
                                 </div>
                             </div>
+
                             <div class="col-sm-12">
                                 <div class="checkbox">
                                     <label>
                                         {{ form.show_usd }} {{ form.show_usd.label.text }}
                                     </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group {% if form.quantity.errors|length > 0 %}has-error{% endif %}">
+                                    {{ form.quantity(class='form-control', placeholder=form.quantity.label.text) }}
+                                    {% for error in form.quantity.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>

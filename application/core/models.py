@@ -147,6 +147,7 @@ class Dish(db.Model):
     price = db.Column(db.Float)
     number = db.Column(db.Integer, default=1)
     category_id = db.Column(db.Integer, db.ForeignKey('dish_categories.id'))
+    quantity = db.Column(db.Integer)
 
     def get_full_name(self):
         return self.category.get_nested_names() + ' ' + self.name
@@ -173,7 +174,7 @@ class Order(db.Model):
     order_items = db.relationship('OrderItem', lazy='dynamic',
                                   backref='order', cascade='all, delete-orphan')
     location = db.relationship('Location', uselist=False, cascade='all,delete', backref='order')
-
+    distance = db.Column(db.String(15))
     def fill_from_user_cart(self, cart):
         """
         Fill order items from user's cart.

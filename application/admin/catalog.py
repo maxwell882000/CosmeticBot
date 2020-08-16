@@ -93,11 +93,13 @@ def create_dish():
         name_uz = form.name_uz.data
         description_ru = form.description_ru.data
         description_uz = form.description_uz.data
+        show_usd = form.show_usd.data
+        quantity = form.quantity.data
         image = form.image.data
         price = form.price.data
         category_id = form.category.data
         show_usd = form.show_usd.data
-        new_dish = dishservice.create_dish(name_ru, name_uz, description_ru, description_uz, image, price, category_id, show_usd)
+        new_dish = dishservice.create_dish(name_ru, name_uz, description_ru, description_uz, image, price, category_id,show_usd, quantity)
         flash('Блюдо {} | {} успешно добавлено в категорию {} | {}'.format(
             name_ru, name_uz, new_dish.category.name, new_dish.category.name_uz
         ), category='success')
@@ -118,11 +120,12 @@ def dish(dish_id: int):
         description_uz = form.description_uz.data
         image = form.image.data
         price = form.price.data
+        quantity = form.quantity.data
         category_id = form.category.data
         delete_image = form.delete_image.data
         show_usd = form.show_usd.data
         dishservice.update_dish(dish_id, name_ru, name_uz, description_ru, description_uz,
-                                image, price, category_id, delete_image, show_usd)
+                                image, price, category_id, delete_image, show_usd, quantity)
         flash('Блюдо {} | {} изменено'.format(name_ru, name_uz), category='success')
         return redirect(url_for('admin.catalog'))
     dish = dishservice.get_dish_by_id(dish_id)
