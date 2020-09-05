@@ -20,8 +20,8 @@
                                 <th>Номер телефона</th>
                                 <th>Имя покупателя</th>
                                 <th>Способ оплаты</th>
-                                <th>Стоимость доставки, $</th>
-                                <th>Стоимость заказа, $</th>
+                                <th>Стоимость доставки, сум</th>
+                                <th>Стоимость заказа, сум</th>
                                 <th>Дистанция</th>
                                 <th>Действия</th>
 
@@ -45,7 +45,7 @@
                                         {% if order.delivery_price %}
                                             {{ order.delivery_price|price }}
                                         {% else %}
-                                            -
+                                            Не расчитана
                                         {% endif %}
                                     </td>
                                     <td>
@@ -56,7 +56,11 @@
                                         {% endif %}
                                     </td>
                                     <td>
-                                        {{ order.distance }}
+                                        {% if order.distance %}
+                                            {{ order.distance }}
+                                        {% else %}
+                                            Не расчитана
+                                        {% endif %}
                                     </td>
                                     <td>
                                         <a href="{{ url_for('admin.order', order_id=order.id) }}"

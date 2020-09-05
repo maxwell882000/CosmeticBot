@@ -78,6 +78,30 @@ def get_limit_delivery_price() -> int:
     return value
 
 
+def set_limit_delivery_km(price: int):
+    """
+    Set limit delivery cost
+    :param price: price value
+    :return: void
+    """
+    settings = shelve.open(filename)
+    settings['limit_delivery_km'] = price
+    settings.close()
+
+
+def get_limit_delivery_km() -> int:
+    """
+    Get limit delivery cost or set default value - 15000
+    :return: limit delivery price
+    """
+    settings = shelve.open(filename)
+    if 'limit_delivery_km' not in settings:
+        settings['limit_delivery_km'] = 15
+    value = settings['limit_delivery_km']
+    settings.close()
+    return value
+
+
 def set_currency_value(value: int):
     """
     Set currency value

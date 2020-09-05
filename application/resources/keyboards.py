@@ -45,9 +45,10 @@ _order_location_keyboard_ru.add(get_string('go_back'))
 _keyboards_ru['order.address'] = _order_location_keyboard_ru
 
 _order_payment_keyboard_ru = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-_order_payment_keyboard_ru.add(from_order_payment_method(Order.PaymentMethods.CASH, 'ru'),
-                               from_order_payment_method(Order.PaymentMethods.PAYME, 'ru'),
-                               get_string('go_back'), get_string('go_to_menu'))
+_order_payment_keyboard_ru.add(from_order_payment_method(Order.PaymentMethods.PAYME, 'ru'),
+                               from_order_payment_method(Order.PaymentMethods.CLICK, 'ru'),
+                               from_order_payment_method(Order.PaymentMethods.CASH, 'ru'))
+_order_payment_keyboard_ru.add(get_string('go_back'), get_string('go_to_menu'))
 _keyboards_ru['order.payment'] = _order_payment_keyboard_ru
 
 _order_confirmation_keyboard_ru = ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
@@ -86,9 +87,10 @@ _order_location_keyboard_uz.add(location_button_uz)
 _order_location_keyboard_uz.add(get_string('go_back', 'uz'))
 _keyboards_uz['order.address'] = _order_location_keyboard_uz
 _order_payment_keyboard_uz = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-_order_payment_keyboard_uz.add(from_order_payment_method(Order.PaymentMethods.CASH, 'uz'),
-                               from_order_payment_method(Order.PaymentMethods.PAYME, 'uz'),
-                               get_string('go_back', 'uz'), get_string('go_to_menu', 'uz'))
+_order_payment_keyboard_uz.add(from_order_payment_method(Order.PaymentMethods.PAYME, 'uz'),
+                               from_order_payment_method(Order.PaymentMethods.CLICK, 'uz'),
+                               from_order_payment_method(Order.PaymentMethods.CASH, 'uz'))
+_order_payment_keyboard_uz.add(get_string('go_back', 'uz'), get_string('go_to_menu', 'uz'))
 _keyboards_uz['order.payment'] = _order_payment_keyboard_uz
 _order_confirmation_keyboard_uz = ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
 _order_confirmation_keyboard_uz.add(get_string('order.confirm', 'uz'), get_string('order.cancel', 'uz'))
@@ -136,11 +138,13 @@ def from_dishes(dishes, language: str) -> ReplyKeyboardMarkup:
 
 def from_cart_items(cart_items, language) -> ReplyKeyboardMarkup:
     cart_items_keyboard = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-    if language == 'uz':
-        names = [cart_item.dish.description_uz for cart_item in cart_items]
-    else:
-        names = [cart_item.dish.description for cart_item in cart_items]
-    names = ['❌ ' + name for name in names]
+    cart_dict = {}
+    counter = 0
+    for cart_item in cart_items:
+        counter += 1
+        cart_dict[counter] = cart_item
+    names = list(cart_dict.keys())
+    names = ['❌ ' + str(name) for name in names]
     cart_items_keyboard.add(*names)
     cart_items_keyboard.add(get_string('go_back', language), get_string('cart.clear', language))
     cart_items_keyboard.add(get_string('catalog.make_order', language))

@@ -5,6 +5,7 @@ from application.utils import bot as botutils
 from telebot.types import Message
 from application.core import exceptions
 from application.core.models import Dish
+from . import userservice
 
 
 def check_catalog(message: Message):
@@ -66,9 +67,19 @@ def dish_action_processor(message: Message):
         if not message.text.isdigit():
             error()
             return
-        userservice.add_dish_to_cart(user_id, current_dish, int(message.text))
-        continue_message = strings.get_string('catalog.continue', language)
-        back_to_the_catalog(chat_id, language, continue_message)
+        # Проверка на количество товара в базе.
+        selected_number = int(message.text)
+        dish_to_check = Dish.query.get(current_dish.id)
+
+        if selected_number > dish_to_check.quantity:
+            not_enough_count = strings.get_string('not_enough_count', language)
+            msg = bot.send_message(chat_id, text=not_enough_count)
+            bot.register_next_step_handler(msg, dish_action_processor)
+
+        else:
+            userservice.add_dish_to_cart(user_id, current_dish, int(message.text))
+            continue_message = strings.get_string('catalog.continue', language)
+            back_to_the_catalog(chat_id, language, continue_message)
 
 
 def choose_dish_processor(message: Message, **kwargs):
@@ -127,15 +138,15 @@ def catalog_processor(message: Message, **kwargs):
                 try:
                     image = open(category.image_path, 'rb')
                 except FileNotFoundError:
-                    bot.send_message(chat_id, message, reply_markup=keyboard)
+                    bot.send_message(chat_id=chat_id, text=message, reply_markup=keyboard)
                 else:
-                    sent_message = bot.send_photo(chat_id, image, caption=message,
+                    sent_message = bot.send_photo(chat_id=chat_id, photo=image, caption=message,
                                                   reply_markup=keyboard)
                     dishservice.set_category_image_id(category, sent_message.photo[-1].file_id)
             elif category.image_id:
-                bot.send_photo(chat_id, category.image_id, caption=message, reply_markup=keyboard)
+                bot.send_photo(chat_id=chat_id, photo=category.image_id, caption=message, reply_markup=keyboard)
         else:
-            bot.send_message(chat_id, message, reply_markup=keyboard)
+            bot.send_message(chat_id=chat_id, text=message, reply_markup=keyboard)
 
     chat_id = message.chat.id
     if message.successful_payment:
@@ -191,6 +202,7 @@ def catalog_processor(message: Message, **kwargs):
 
 @bot.message_handler(commands=['order'], func=botutils.check_auth)
 @bot.message_handler(content_types=['text'], func=lambda m: botutils.check_auth(m) and check_catalog(m))
+       
 def catalog(message: Message):
     chat_id = message.chat.id
     user_id = message.from_user.id

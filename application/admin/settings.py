@@ -17,6 +17,28 @@ def settings():
                            location_form=location_form)
 
 
+@bp.route('/settings/time', methods=['POST'])
+@login_required
+def set_times():
+    time_form = TimeSet()
+    if time_form.validate_on_submit():
+        start = time_form.start.data
+        end = time_form.end.data
+        notify = time_form.notification.data
+        app_settings.set_timelimits((start, end))
+        app_settings.set_timenotify(notify)
+        flash('Задано время работы', category='success')
+        return redirect(url_for('admin.settings'))
+    delivery_cost_form = DeliveryPriceForm()
+    location_form = CafeLocationForm()
+    delivery_cost_form.fill_from_settings()
+    location_form.fill_from_settings()
+    return render_template('admin/settings.html', title='Настройки', area='settings',
+                           cost_form=delivery_cost_form,
+                           location_form=location_form,
+                           time_form=time_form)
+
+
 @bp.route('/settings/location', methods=['POST'])
 @login_required
 def set_location():
@@ -42,6 +64,8 @@ def set_delivery_cost():
         first_3_km = int(delivery_cost_form.first_3_km.data)
         others_km = int(delivery_cost_form.others_km.data)
         app_settings.set_delivery_cost((first_3_km, others_km))
+        limit_km = int(delivery_cost_form.limit_km.data)
+        app_settings.set_limit_delivery_km(limit_km)
         limit_delivery_price = int(delivery_cost_form.limit_price.data)
         app_settings.set_limit_delivery_price(limit_delivery_price)
         app_settings.set_currency_value(int(delivery_cost_form.currency_value.data))
@@ -52,3 +76,4 @@ def set_delivery_cost():
     return render_template('admin/settings.html', title='Настройки', area='settings',
                            cost_form=delivery_cost_form,
                            location_form=location_form)
+        

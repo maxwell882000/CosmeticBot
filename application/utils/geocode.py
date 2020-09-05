@@ -2,7 +2,6 @@ from math import radians, cos, sin, asin, sqrt
 from yandex_geocoder import Client
 from typing import Optional, AnyStr
 
-
 def distance_between_two_points(first_coordinates: tuple, second_coordinates: tuple) -> tuple:
     """
     Calculate the great circle distance between two pints
@@ -24,11 +23,11 @@ def distance_between_two_points(first_coordinates: tuple, second_coordinates: tu
     km = 6371 * c
     # If distance in kilometres, round the value
     if km >= 1:
-        return round(km, 1), 'km'
+        return round(km, 1), 'км'
     else:
         # If distance is smaller than 1, return metres value
         metres = km * 1000
-        return round(metres), 'm'
+        return round(metres), 'м'
 
 
 def get_address_by_coordinates(coordinates: tuple) -> Optional[AnyStr]:
@@ -42,3 +41,4 @@ def get_address_by_coordinates(coordinates: tuple) -> Optional[AnyStr]:
     longitude = coordinates[1]
     location = client.address(longitude, latitude)
     return location
+

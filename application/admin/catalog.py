@@ -89,19 +89,20 @@ def create_dish():
     all_categories = dishservice.get_all_categories()
     form.category.choices = [(c.id, '{} | {}'.format(c.name, c.name_uz)) for c in all_categories]
     if form.validate_on_submit():
-        name_ru = form.name_ru.data
+        name = form.name_ru.data
         name_uz = form.name_uz.data
-        description_ru = form.description_ru.data
+        description = form.description_ru.data
         description_uz = form.description_uz.data
         show_usd = form.show_usd.data
         quantity = form.quantity.data
         image = form.image.data
         price = form.price.data
         category_id = form.category.data
-        show_usd = form.show_usd.data
-        new_dish = dishservice.create_dish(name_ru, name_uz, description_ru, description_uz, image, price, category_id,show_usd, quantity)
+        new_dish = dishservice.create_dish(name=name, name_uz=name_uz, description=description, description_uz=description_uz,
+                                           image=image, price=price, category_id=category_id, quantity=quantity, show_usd=show_usd)
+        print(new_dish)
         flash('Блюдо {} | {} успешно добавлено в категорию {} | {}'.format(
-            name_ru, name_uz, new_dish.category.name, new_dish.category.name_uz
+            name, name_uz, new_dish.category.name, new_dish.category.name_uz
         ), category='success')
         return redirect(url_for('admin.catalog'))
     return render_template('admin/new_dish.html', title="Добавить блюдо", area='catalog', form=form)

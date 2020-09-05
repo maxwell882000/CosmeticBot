@@ -16,7 +16,7 @@ def get_all_categories(sort_by_number: bool = False) -> List[DishCategory]:
 
 def get_parent_categories(sort_by_number: bool = False) -> List[DishCategory]:
     if sort_by_number:
-        return DishCategory.query.filter(DishCategory.parent_id == None).order_by(DishCategory.number.asc()).all()
+        return DishCategory.query.filter(DishCategory.parent_id == None).order_by(DishCategory.name.asc()).all()
     else:
         return DishCategory.query.filter(DishCategory.parent_id == None).all()
 
@@ -61,11 +61,17 @@ def remove_category(category_id: int):
     db.session.commit()
 
 
-def create_dish(name_ru, name_uz, description_ru, description_uz, image, price, category_id, quantity, show_usd=False):
-    dish = Dish(name=name_ru, name_uz=name_uz,
-                description=description_ru, description_uz=description_uz,
-                price=price, category_id=category_id, show_usd=show_usd, quantity=quantity)
-    if type(image) is str:
+def create_dish(name, name_uz, description, description_uz, image, price, quantity, category_id, show_usd=False):
+    check_quantity = ''
+    if quantity != check_quantity:
+        check_quantity = quantity
+    elif quantity == check_quantity:
+        check_quantity = 0
+
+    dish = Dish(name=name, name_uz=name_uz,
+                description=description, description_uz=description_uz,
+                price=price, quantity=check_quantity, category_id=category_id, show_usd=show_usd)
+    if type(image) is str and image != '':
         file_path = os.path.join(Config.UPLOAD_DIRECTORY, image)
         dish.image_path = file_path
     elif image and image.filename != '':
@@ -77,11 +83,11 @@ def create_dish(name_ru, name_uz, description_ru, description_uz, image, price, 
     return dish
 
 
-def update_dish(dish_id, name_ru, name_uz, description_ru, description_uz, image, price, category_id, delete_image, show_usd, quantity):
+def update_dish(dish_id, name, name_uz, description, description_uz, image, price, category_id, delete_image, show_usd, quantity):
     dish = get_dish_by_id(dish_id)
-    dish.name = name_ru
+    dish.name = name
     dish.name_uz = name_uz
-    dish.description = description_ru
+    dish.description = description
     dish.description_uz = description_uz
     dish.price = price
     dish.show_usd = show_usd
@@ -191,3 +197,8 @@ def set_dish_image_id(dish: Dish, image_id: str):
 def set_category_image_id(category: DishCategory, image_id: str):
     category.image_id = image_id
     db.session.commit()
+
+
+def get_dish_and_count():
+    dish_and_count = Dish.query.order_by(Dish.description.asc()).all()
+    return dish_and_count

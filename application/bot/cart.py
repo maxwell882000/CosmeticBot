@@ -7,7 +7,8 @@ from .orders import order_processor
 
 
 def _total_cart_sum(cart) -> int:
-    summary_dishes_sum = [cart_item.dish.price * cart_item.count for cart_item in cart]
+    summary_dishes_sum = [cart_item.dish.price * cart_item.count
+                          for cart_item in cart]
     total = sum(summary_dishes_sum)
     return total
 

@@ -81,6 +81,19 @@ def _to_the_confirmation(chat_id, current_order, language):
                          start_parameter)
         bot.register_next_step_handler_by_chat_id(chat_id, confirmation_processor, total=total, message_id=invoice.message_id)
         return
+    elif current_order.payment_method == Order.PaymentMethods.CLICK:
+        title = strings.get_string('order.payment.title', language).format(current_order.id)
+        description = strings.get_string('order.payment.description', language)
+        payload = str(total)
+        start_parameter = secrets.token_hex(20)
+        currency = 'UZS'
+        prices = strings.from_order_items_to_labeled_prices(current_order.order_items.all(), language)
+        confirmation_keyboard = keyboards.get_keyboard('order.payment_confirmation', language)
+        bot.send_message(chat_id, summary_order_message, parse_mode='HTML', reply_markup=confirmation_keyboard)
+        invoice = bot.send_invoice(chat_id, title, description, payload, Config.PAYMENT_PROVIDER_TOKEN_CLICK, currency, prices,
+                         start_parameter)
+        bot.register_next_step_handler_by_chat_id(chat_id, confirmation_processor, total=total, message_id=invoice.message_id)
+        return
     else:
         bot.send_message(chat_id, summary_order_message, parse_mode='HTML', reply_markup=confirmation_keyboard)
     bot.register_next_step_handler_by_chat_id(chat_id, confirmation_processor, total=total)
@@ -155,6 +168,9 @@ def payment_method_processor(message: Message):
         phone_number()
     elif strings.from_order_payment_method(Order.PaymentMethods.PAYME, language) in message.text:
         orderservice.set_payment_method(user_id, Order.PaymentMethods.PAYME)
+        phone_number()
+    elif strings.from_order_payment_method(Order.PaymentMethods.CLICK, language) in message.text:
+        orderservice.set_payment_method(user_id, Order.PaymentMethods.CLICK)
         phone_number()
     else:
         error()

@@ -1,11 +1,12 @@
 from application import db
-from application.core.models import Order, User, Location
+from application.core.models import Order, User, Location, Dish
 from application.utils import geocode, date
 from . import userservice
 from datetime import datetime, timedelta
 import settings
 from math import floor
 from typing import List
+from telebot.types import Message
 
 
 def get_current_order_by_user(user_id: int) -> Order:
@@ -107,6 +108,24 @@ def set_address_by_string(user_id: int, address: str):
     db.session.commit()
 
 
+def get_delivery_price_by_distance(distance):
+    dis = distance[0]
+    delivery_price = settings.get_delivery_cost()
+    delivery_price_limit = settings.get_limit_delivery_price()
+    delivery_price_km = settings.get_limit_delivery_km()
+    if dis <= 3.0:
+        delivery_cost = delivery_price[0]
+        return rount(delivery_cost, 1)
+
+    elif dis > 3.0 and dis <= delivery_price_km:
+        delivery_cost = (dis - 3) * delivery_price[1] + delivery_price[0]
+        return round(delivery_cost, 1)
+
+    else:
+        delivery_cost = (dis * delivery_price[1]) + ((dis - delivery_price_km) * delivery_price_limit)
+        return round(delivery_cost, 1)
+
+
 def set_address_by_map_location(user_id: int, map_location: tuple) -> bool:
     """
     Set address by location sent by user
@@ -123,10 +142,10 @@ def set_address_by_map_location(user_id: int, map_location: tuple) -> bool:
     order_location = Location(latitude=latitude, longitude=longitude, address=address)
     distance = geocode.distance_between_two_points(map_location, settings.get_cafe_coordinates())
     current_order.location = order_location
-    current_order.distance = ' '.join(distance)
+    current_order.distance = distance
+    current_order.delivery_price = get_delivery_price_by_distance(distance)
     db.session.commit()
     return True
-
 
 
 def set_phone_number(user_id: int, phone_number: str) -> Order:
@@ -147,7 +166,19 @@ def confirm_order(user_id: int, user_name, total_amount: float):
     current_order.confirmed = True
     current_order.confirmation_date = datetime.utcnow()
     current_order.user_name = user_name
-    current_order.total_amount = total_amount
+    if current_order.delivery_price:
+        current_order.total_amount = current_order.delivery_price + total_amount 
+    else:
+        current_order.total_amount = total_amount 
+    reduce_dish_count(user_id)
     userservice.clear_user_cart(user_id)
     db.session.commit()
     return current_order
+
+
+def reduce_dish_count(user_id):
+    cart = userservice.get_user_cart(user_id)
+    for cart_item in cart:
+        dish_in_cart = Dish.query.get(cart_item.dish.id)
+        dish_in_cart.quantity = dish_in_cart.quantity - cart_item.count
+    db.session.commit()

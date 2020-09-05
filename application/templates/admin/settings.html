@@ -28,6 +28,13 @@
                                 <span class="help-block">{{ error }}</span>
                             {% endfor %}
                         </div>
+                        <div class="form-group {% if cost_form.limit_km.errors|length > 0 %}has-error{% endif %}">
+                            {{ cost_form.limit_km.label }}
+                            {{ cost_form.limit_km(class='form-control') }}
+                            {% for error in cost_form.limit_km.errors %}
+                                <span class="help-block">{{ error }}</span>
+                            {% endfor %}
+                        </div>
                         <div class="form-group {% if cost_form.limit_price.errors|length > 0 %}has-error{% endif %}">
                             {{ cost_form.limit_price.label }}
                             {{ cost_form.limit_price(class='form-control') }}

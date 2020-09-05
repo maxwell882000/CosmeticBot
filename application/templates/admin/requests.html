@@ -41,4 +41,9 @@
             </div>
         </div>
     </div>
+
+
+    {% for c in cart %}
+        <br>{{ c.dish.description }} || {{ c.dish.name }} || {{ c.count }} || {{ c.dish.id }}
+    {% endfor %}
 {% endblock %}

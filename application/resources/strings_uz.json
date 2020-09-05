@@ -39,6 +39,7 @@
     "order.payment_pickup": "Buyurtmangiz uchun <b>to’lov turini</b> tanlang",
     "order.cash": "\uD83D\uDCB5 Naqd pul",
     "order.payme": "\uD83D\uDCB3 Payme",
+    "order.click": "\uD83D\uDCB3 Click",
     "order.terminal": "\uD83D\uDCB3 Terminal",
     "order.payment_error": "Quyidagi to'lov usulini tanlang",
     "order.delivery_price_helper": "*Yetkazib berish buyurtma summasiga kirmaydi.",
@@ -69,5 +70,8 @@
     "shipping_method": "Yuk tashish usuli",
     "my_location": "\uD83D\uDDFA Mening joyim",
     "sum": "so'm",
-    "usd": "$"
+    "usd": "$",
+    "not_enough_count": "Maxsulot soni kamroq ekan.\nKamroq olishingizni so`rayman.",
+    "accept_btn": "Rozilik beraman",
+    "policy_text": "Foydalanuvchi shartnomasi bilan tanishib chiqqaningizni tasdiqlang! \nFoydalanuvchi shartnomasini havolani bosish orqali ko'rishingiz mumkin: https://delivera.uz/agreement"
 }

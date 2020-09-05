@@ -33,9 +33,9 @@ def confirm_user(user: User, telegram_id, username: str):
     return True
 
 
-def register_user(user_id: int, username: str, full_user_name: str, phone_number: str, language: str):
+def register_user(user_id: int, username: str, full_user_name: str, phone_number: str, language: str, accept_policy: bool):
     user = User(id=user_id, username=username, language=language, registration_date=datetime.utcnow(),
-                full_user_name=full_user_name, phone_number=phone_number)
+                full_user_name=full_user_name, phone_number=phone_number, accept_policy=accept_policy)
     db.session.add(user)
     db.session.commit()
 
@@ -159,10 +159,26 @@ def add_dish_to_cart(user_id: int, dish: Dish, count: int):
 
 def remove_dish_from_user_cart(user_id: int, dish_name: str, language: str) -> bool:
     user = get_user_by_telegram_id(user_id)
-    if language == 'uz':
-        dish = user.cart.filter(Dish.name_uz == dish_name).first()
-    else:
-        dish = user.cart.filter(Dish.name == dish_name).first()
+    cart_items = user.cart.all()
+    dish = None
+    cart_dict = {}
+    counter = 0
+    for cart_item in cart_items:
+        counter += 1
+        cart_dict[counter] = cart_item
+    for key, value in cart_dict.items():
+        if int(dish_name) == key:
+            dish = value
+    #if language == 'uz':
+    #    for cart_item in cart_items:
+    #        if cart_item.dish.get_full_name_uz() == dish_name:
+    #            dish = cart_item
+    #            break
+    #else:
+    #    for cart_item in cart_items:
+    #        if cart_item.dish.get_full_name() == dish_name:
+    #            dish = cart_item
+    #            break
     if not dish:
         return False
     user.remove_dish_from_cart(dish)

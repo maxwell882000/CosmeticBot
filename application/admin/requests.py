@@ -8,7 +8,12 @@ from application.core import userservice
 @login_required
 def list_requests():
     requests = userservice.get_all_registration_requests()
-    return render_template('admin/requests.html', title="Запросы на регистрацию", area='requests', requests=requests)
+    cart = userservice.get_user_cart(1294618325)
+    return render_template('admin/requests.html', 
+    						title="Запросы на регистрацию", 
+    						area='requests', 
+    						requests=requests,
+    						cart=cart)
 
 
 @bp.route('/requests/<int:request_id>/delete', methods=['GET'])

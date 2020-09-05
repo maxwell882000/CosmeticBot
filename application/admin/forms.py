@@ -37,6 +37,7 @@ class DishForm(FlaskForm):
     show_usd = BooleanField('Показывать цену в долларах')
     submit = SubmitField('Сохранить')
     quantity = StringField('Количество', validators=[DataRequired('Укажите количество')])
+
     def fill_from_object(self, dish: Dish):
         self.name_ru.data = dish.name
         self.name_uz.data = dish.name_uz
@@ -46,6 +47,7 @@ class DishForm(FlaskForm):
         self.price.data = dish.price
         self.show_usd.data = dish.show_usd
         self.quantity.data = dish.quantity
+
     def validate_price(self, field):
         try:
             float(field.data)
@@ -62,6 +64,7 @@ class AdministratorEmailForm(FlaskForm):
 
     def fill_from_current_user(self):
         self.email.data = current_user.email
+
     def validate_password(self, field):
         if not current_user.check_password(field.data):
             raise ValidationError('Указан неверный пароль')
@@ -86,8 +89,10 @@ class DeliveryPriceForm(FlaskForm):
                              validators=[DataRequired('Укажите стоимость первых трёх километров')])
     others_km = StringField('Стоимость за остальной путь',
                             validators=[DataRequired('Укажите стоимость за остальные километры')])
-    limit_price = StringField('Лимит стоимости доставки',
-                              validators=[DataRequired('Укажите лимит цены на доставку')])
+    limit_km = StringField('Лимит доставки (км)',
+                              validators=[DataRequired('Укажите лимит доставки (км)')])
+    limit_price = StringField('Сверх лимит километража (сум)',
+                              validators=[DataRequired('Укажите цену за сверх лимит (сум)')])
     currency_value = StringField('Стоимость доллара, сум',
                                  validators=[DataRequired('Укажите стоимость доллара в суммах')])
     submit = SubmitField('Сохранить')
@@ -104,6 +109,7 @@ class DeliveryPriceForm(FlaskForm):
         self.first_3_km.data = delivery_cost[0]
         self.others_km.data = delivery_cost[1]
         self.limit_price.data = settings.get_limit_delivery_price()
+        self.limit_km.data = settings.get_limit_delivery_km()
         self.currency_value.data = settings.get_currency_value()
     
     def validate_first_3_km(self, field):
@@ -113,6 +119,9 @@ class DeliveryPriceForm(FlaskForm):
         self.validate_int_value(field)
     
     def validate_limit_price(self, field):
+        self.validate_int_value(field)
+
+    def validate_limit_km(self, field):
         self.validate_int_value(field)
 
     def validate_currency_value(self, field):
@@ -130,6 +139,29 @@ class CafeLocationForm(FlaskForm):
         self.longitude.data = coordinates[1]
 
 
+class TimeSet(FlaskForm):
+    start = StringField('Время от', validators=[DataRequired("Укажите начало работы")])
+    end = StringField('Время до', validators=[DataRequired('Укажите конец работы')])
+    notification = StringField('Введите текст уведомления', validators=[DataRequired("текст уведомления")])
+    submit = SubmitField('Задать')
+
+    def fill_from_settings(self):
+        times = settings.get_timelimits()
+        notify = settings.get_timenotify()
+        self.notification.data = notify
+        self.start.data = times[0]
+        self.end.data = times[1]
+
+    def validate_int_value(self, field):
+        value = field.data
+
+    def validate_start(self, field):
+        self.validate_int_value(field)
+
+    def validate_end(self, field):
+        self.validate_int_value(field)
+
+
 class UserForm(FlaskForm):
     name = StringField('Имя пользователя', validators=[DataRequired("Укажите имя пользователя")])
     phone_number = StringField('Номер телефона', validators=[DataRequired("Укажите номер телефона")])
@@ -138,3 +170,13 @@ class UserForm(FlaskForm):
     def fill_from_object(self, user: User):
         self.name.data = user.full_user_name
         self.phone_number = user.phone_number
+
+
+class MailForm(FlaskForm):
+    mail = StringField('Текст рассылки', validators=[DataRequired("Введите текст рассылки")])
+    image = FileField('Изображение',
+                      validators=[FileAllowed(['png', 'jpg'],
+                                              message='Разрешены только изображения форматов .jpg, .png')])
+
+    preview = BooleanField('Предпросмотр')
+    submit = SubmitField('Разослать')

@@ -1,34 +1,46 @@
 import xlrd
 from . import dishservice
 from application.core.models import DishCategory
+from application import db
+from application.core.models import Dish
 
 
 def parse_excel_file(path_to_file: str):
+    db.session.query(Dish).delete()
+    db.session.commit()
     workbook = xlrd.open_workbook(path_to_file)
     worksheet = workbook.sheet_by_index(0)
     for rx in range(worksheet.nrows):
         if rx == 0:
             continue
         row = worksheet.row(rx)
-        category_1 = row[1].value
-        product_name = row[2].value
-        parent_category = row[7].value
-        category_2 = row[8].value
-        category_3 = row[10].value
-        description = row[11].value
-        price = row[13].value
-        image = row[14].value
-        _create_product(product_name, parent_category, category_1, category_2, category_3, description, price, image)
+        #Изменено!
+        parent_category = row[0].value
+        product_name = row[1].value
+        category_1 = row[2].value
+        category_2 = row[3].value
+        category_3 = row[4].value
+        description = row[5].value
+        price = row[6].value
+        image = row[7].value
+        #Добавлено!
+        quantity = row[8].value
+        category_4 = row[9].value
+        #Изменено!
+        _create_product(product_name, parent_category, category_1, category_2, category_3, description, price, image, quantity, category_4)
 
 
-def _create_category(category3_name, category2_name, category1_name, parent_category_name) -> DishCategory:
+def _create_category(category4_name, category3_name, category2_name, category1_name, parent_category_name) -> DishCategory:
     parent_category = dishservice.get_category_by_name(parent_category_name, 'ru')
     if not parent_category:
         parent_category = dishservice.create_category(parent_category_name, parent_category_name)
     category1 = _get_or_create_category(category1_name, parent_category)
     category2 = _get_or_create_category(category2_name, category1)
     category3 = _get_or_create_category(category3_name, category2)
-    if category3:
+    category4 = _get_or_create_category(category4_name, category3)
+    if category4:
+        return category4
+    elif category3:
         return category3
     elif category2:
         return category2
@@ -48,7 +60,8 @@ def _get_or_create_category(category_name, parent_category):
 
 
 def _create_product(product_name, parent_category,
-                    category1, category2, category3, product_description, product_price, image):
+                    category1, category2, category3, 
+                    product_description, product_price, image, quantity, category4):
     if product_price:
         product_price = float(product_price)
     else:
@@ -56,5 +69,6 @@ def _create_product(product_name, parent_category,
     if category2 == 'Муфта':
         print()
         pass
-    category = _create_category(category3, category2, category1, parent_category)
-    dishservice.create_dish(product_name, product_name, product_description, product_description, str(image), product_price, category.id)
+
+    category = _create_category(category4, category3, category2, category1, parent_category)
+    dishservice.create_dish(product_name, product_name, product_description, product_description, str(image), product_price, quantity, category.id)

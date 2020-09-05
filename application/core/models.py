@@ -46,6 +46,7 @@ class User(db.Model):
     cart = db.relationship('CartItem', lazy='dynamic', backref='user', cascade='all, delete-orphan')
     orders = db.relationship('Order', lazy='dynamic', backref='customer', cascade='all, delete-orphan')
     comments = db.relationship('Comment', lazy='dynamic', backref='author')
+    accept_policy = db.Column(db.Boolean, default=False)
 
     def _get_cart_item_for_dish(self, dish) -> CartItem:
         """
@@ -117,6 +118,8 @@ class DishCategory(db.Model, BaseNestedSets):
                 name = self.parent.parent.name + ' ' + name
                 if self.parent.parent.parent:
                     name = self.parent.parent.parent.name + ' ' + name
+                    if self.parent.parent.parent.parent:
+                        name = self.parent.parent.parent.parent.name + ' ' + name
         return name
 
     def get_nested_names_uz(self):
@@ -127,6 +130,8 @@ class DishCategory(db.Model, BaseNestedSets):
                 name = self.parent.parent.name_uz + ' ' + name
                 if self.parent.parent.parent:
                     name = self.parent.parent.parent.name_uz + ' ' + name
+                    if self.parent.parent.parent.parent:
+                        name = self.parent.parent.parent.parent.name + ' ' + name
         return name
 
 
@@ -147,12 +152,14 @@ class Dish(db.Model):
     price = db.Column(db.Float)
     number = db.Column(db.Integer, default=1)
     category_id = db.Column(db.Integer, db.ForeignKey('dish_categories.id'))
-    quantity = db.Column(db.Integer)
+    quantity = db.Column(db.String(100), default=0)
 
     def get_full_name(self):
         return self.category.get_nested_names() + ' ' + self.name
+
     def get_full_name_uz(self):
         return self.category.get_nested_names_uz() + ' ' + self.name_uz
+
 
 class Order(db.Model):
     """
@@ -175,6 +182,7 @@ class Order(db.Model):
                                   backref='order', cascade='all, delete-orphan')
     location = db.relationship('Location', uselist=False, cascade='all,delete', backref='order')
     distance = db.Column(db.String(15))
+
     def fill_from_user_cart(self, cart):
         """
         Fill order items from user's cart.
@@ -200,6 +208,7 @@ class Order(db.Model):
     class PaymentMethods:
         CASH = 'cash'
         PAYME = 'payme'
+        CLICK = 'click'
 
 
 class Location(db.Model):

@@ -43,11 +43,12 @@
     "order.payment_pickup": "Выберите <b>способ оплаты</b> за Ваш заказ",
     "order.cash": "\uD83D\uDCB5 Наличные",
     "order.payme": "\uD83D\uDCB3 Payme",
+    "order.click": "\uD83D\uDCB3 Click",
     "order.payment.title": "Заказ #{}",
     "order.payment.description": "Оплатите заказ, указанный выше",
     "order.payment.label": "Оплатить",
     "order.payment_error": "Выберите способ оплаты ниже",
-    "order.delivery_price_helper": "*Сумма доставки не входит в итог заказа",
+    "order.delivery_price_helper": "*Сумма доставки входит в итог заказа",
     "order.delivery_time": "<i>После звонка оператора ваш заказ будет оформлен и доставлен в течении 40-60 минут</i>",
     "order.phone_number": "Укажите номер в формате <b>+998 ** *** ** **</b> или воспользуйтесь вариантами ниже",
     "order.confirm": "✅ Подтверждаю",
@@ -77,5 +78,8 @@
     "shipping_method": "Способ доставки",
     "my_location": "\uD83D\uDDFA Моя локация",
     "sum": "сум",
-    "usd": "$"
+    "usd": "$",
+    "not_enough_count": "На данный момент столько нет. \nВыберите ещё раз.",
+    "accept_btn": "Я согласен(сна)",
+    "policy_text": "Подтвердите своё согласие с пользовательским соглашением. \nВы можете ознакомиться с пользовательским соглашением пройдя по ссылке: https://delivera.uz/agreement"
 }
