@@ -33,9 +33,9 @@ def confirm_user(user: User, telegram_id, username: str):
     return True
 
 
-def register_user(user_id: int, username: str, full_user_name: str, phone_number: str, language: str, accept_policy: bool):
+def register_user(user_id: int, username: str, full_user_name: str, phone_number: str, language: str):
     user = User(id=user_id, username=username, language=language, registration_date=datetime.utcnow(),
-                full_user_name=full_user_name, phone_number=phone_number, accept_policy=accept_policy)
+                full_user_name=full_user_name, phone_number=phone_number)
     db.session.add(user)
     db.session.commit()
 

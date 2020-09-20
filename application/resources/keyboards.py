@@ -14,13 +14,13 @@ _default_value.add('no_keyboard')
 
 # Initialization russian keyboards
 _welcome_language = ReplyKeyboardMarkup(resize_keyboard=True)
-_welcome_language.add(get_string('language.russian'), get_string('language.uzbek'))
+_welcome_language.add(get_string('language.russian'))
 _keyboards_ru['welcome.language'] = _welcome_language
 
 _main_menu_ru = ReplyKeyboardMarkup(resize_keyboard=True)
 _main_menu_ru.add(get_string('main_menu.make_order'))
 _main_menu_ru.add(get_string('main_menu.send_comment'))
-_main_menu_ru.add(get_string('main_menu.language'))
+#_main_menu_ru.add(get_string('main_menu.language'))
 _keyboards_ru['main_menu'] = _main_menu_ru
 
 _go_back_ru = ReplyKeyboardMarkup(resize_keyboard=True)
@@ -46,7 +46,6 @@ _keyboards_ru['order.address'] = _order_location_keyboard_ru
 
 _order_payment_keyboard_ru = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
 _order_payment_keyboard_ru.add(from_order_payment_method(Order.PaymentMethods.PAYME, 'ru'),
-                               from_order_payment_method(Order.PaymentMethods.CLICK, 'ru'),
                                from_order_payment_method(Order.PaymentMethods.CASH, 'ru'))
 _order_payment_keyboard_ru.add(get_string('go_back'), get_string('go_to_menu'))
 _keyboards_ru['order.payment'] = _order_payment_keyboard_ru
@@ -67,7 +66,7 @@ _keyboards_ru['comments.send_comment'] = _comments_keyboard_ru
 _main_menu_uz = ReplyKeyboardMarkup(resize_keyboard=True)
 _main_menu_uz.add(get_string('main_menu.make_order', 'uz'))
 _main_menu_uz.add(get_string('main_menu.send_comment', 'uz'))
-_main_menu_uz.add(get_string('main_menu.language', 'uz'))
+#_main_menu_uz.add(get_string('main_menu.language', 'uz'))
 _keyboards_uz['main_menu'] = _main_menu_uz
 _go_back_uz = ReplyKeyboardMarkup(resize_keyboard=True)
 _go_back_uz.add(get_string('go_back', 'uz'))
@@ -88,7 +87,6 @@ _order_location_keyboard_uz.add(get_string('go_back', 'uz'))
 _keyboards_uz['order.address'] = _order_location_keyboard_uz
 _order_payment_keyboard_uz = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
 _order_payment_keyboard_uz.add(from_order_payment_method(Order.PaymentMethods.PAYME, 'uz'),
-                               from_order_payment_method(Order.PaymentMethods.CLICK, 'uz'),
                                from_order_payment_method(Order.PaymentMethods.CASH, 'uz'))
 _order_payment_keyboard_uz.add(get_string('go_back', 'uz'), get_string('go_to_menu', 'uz'))
 _keyboards_uz['order.payment'] = _order_payment_keyboard_uz
@@ -121,18 +119,21 @@ def from_dish_categories(dish_categories, language: str) -> ReplyKeyboardMarkup:
     else:
         names = [category.name for category in dish_categories]
     categories_keyboard.add(*names)
-    categories_keyboard.add(get_string('go_back', language))
+    categories_keyboard.add(get_string('go_to_menu', language), get_string('go_back', language))
     return categories_keyboard
 
 
 def from_dishes(dishes, language: str) -> ReplyKeyboardMarkup:
     dishes_keyboard = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-    dishes_keyboard.add(get_string('go_back', language), get_string('catalog.cart', language))
+    dishes_keyboard.add(get_string('catalog.cart', language), get_string('go_back', language))
     if language == 'uz':
         names = [dish.name_uz for dish in dishes]
     else:
         names = [dish.name for dish in dishes]
     dishes_keyboard.add(*names)
+    
+###########BELLOW###########
+    dishes_keyboard.add(get_string('go_to_menu', language))
     return dishes_keyboard
 
 

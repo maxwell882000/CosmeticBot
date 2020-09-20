@@ -16,7 +16,7 @@ def get_all_categories(sort_by_number: bool = False) -> List[DishCategory]:
 
 def get_parent_categories(sort_by_number: bool = False) -> List[DishCategory]:
     if sort_by_number:
-        return DishCategory.query.filter(DishCategory.parent_id == None).order_by(DishCategory.name.asc()).all()
+        return DishCategory.query.filter(DishCategory.parent_id == None).order_by(DishCategory.number.asc()).all()
     else:
         return DishCategory.query.filter(DishCategory.parent_id == None).all()
 
@@ -200,5 +200,5 @@ def set_category_image_id(category: DishCategory, image_id: str):
 
 
 def get_dish_and_count():
-    dish_and_count = Dish.query.order_by(Dish.description.asc()).all()
+    dish_and_count = Dish.query.order_by(Dish.quantity.asc()).all()
     return dish_and_count

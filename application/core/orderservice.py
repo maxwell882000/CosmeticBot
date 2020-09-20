@@ -1,5 +1,5 @@
 from application import db
-from application.core.models import Order, User, Location, Dish
+from application.core.models import Order, User, Location, Dish, Stats
 from application.utils import geocode, date
 from . import userservice
 from datetime import datetime, timedelta
@@ -109,22 +109,23 @@ def set_address_by_string(user_id: int, address: str):
 
 
 def get_delivery_price_by_distance(distance):
-    dis = distance[0]
-    delivery_price = settings.get_delivery_cost()
-    delivery_price_limit = settings.get_limit_delivery_price()
-    delivery_price_km = settings.get_limit_delivery_km()
-    if dis <= 3.0:
-        delivery_cost = delivery_price[0]
-        return rount(delivery_cost, 1)
-
-    elif dis > 3.0 and dis <= delivery_price_km:
-        delivery_cost = (dis - 3) * delivery_price[1] + delivery_price[0]
-        return round(delivery_cost, 1)
-
-    else:
-        delivery_cost = (dis * delivery_price[1]) + ((dis - delivery_price_km) * delivery_price_limit)
-        return round(delivery_cost, 1)
-
+    return 0
+    #dis = distance[0]
+    #delivery_price = settings.get_delivery_cost()
+    #delivery_price_limit = settings.get_limit_delivery_price()
+    #delivery_price_km = settings.get_limit_delivery_km()
+    #if dis <= 3.0:
+    #    delivery_cost = delivery_price[0]
+    #    return rount(delivery_cost, 1)
+ 
+    #elif dis > 3.0 and dis <= delivery_price_km:
+    #    delivery_cost = (dis - 3) * delivery_price[1] + delivery_price[0]
+    #    return round(delivery_cost, 1)
+    #
+    #else:
+    #    delivery_cost = (dis * delivery_price[1]) + ((dis - delivery_price_km) * delivery_price_limit)
+    #    return round(delivery_cost, 1)
+ 
 
 def set_address_by_map_location(user_id: int, map_location: tuple) -> bool:
     """
@@ -178,7 +179,16 @@ def confirm_order(user_id: int, user_name, total_amount: float):
 
 def reduce_dish_count(user_id):
     cart = userservice.get_user_cart(user_id)
+
     for cart_item in cart:
         dish_in_cart = Dish.query.get(cart_item.dish.id)
         dish_in_cart.quantity = dish_in_cart.quantity - cart_item.count
+
+        filter_stats_id = Stats.query.filter(Stats.dish_id == cart_item.dish.id).all()
+        if len(filter_stats_id) == 0:
+            stats = Stats(dish_id=cart_item.dish.id, dish_name=cart_item.dish.name, count=cart_item.count)
+            db.session.add(stats)
+        elif len(filter_stats_id) > 0:
+            stats = Stats(dish_id=cart_item.dish.id, dish_name=cart_item.dish.name, count=cart_item.count)
+            db.session.add(stats)
     db.session.commit()

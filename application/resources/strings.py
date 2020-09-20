@@ -37,15 +37,17 @@ def from_cart_items(cart_items, language, total) -> str:
     counter = 0
     for cart_item in cart_items:
         counter += 1
+        dish = cart_item.dish
+        dish_name = dish.get_full_name()
         if language == 'uz':
             dish_item = cart_str_item.format(counter=counter,
-                                             name=cart_item.dish.description_uz,
+                                             name=cart_item.dish.name_uz,
                                              count=cart_item.count,
                                              price=_format_number(cart_item.dish.price * currency_value),
                                              sum=_format_number(cart_item.count * cart_item.dish.price * currency_value))
         else:
             dish_item = cart_str_item.format(counter=counter,
-                                             name=cart_item.dish.description,
+                                             name=dish_name,
                                              count=cart_item.count,
                                              price=_format_number(cart_item.dish.price * currency_value),
                                              sum=_format_number(cart_item.count * cart_item.dish.price * currency_value))
@@ -139,10 +141,10 @@ def from_order(order: Order, language: str, total: int) -> str:
         order_content += '<i>{}</i>: {} {}'.format(get_string('delivery_price', language),
                                                    _format_number(order.delivery_price),
                                                    get_string('sum', language))
-        order_content += '\n\n'
-        order_content += '<i>{}</i>'.format(get_string('order.delivery_price_helper', language))
-    order_content += '\n\n'
-    order_content += get_string('order.delivery_time', language)
+        #order_content += '\n\n'
+        #order_content += '<i>{}</i>'.format(get_string('order.delivery_price_helper', language))
+    #order_content += '\n\n'
+    #order_content += get_string('order.delivery_time', language)
     return order_content
 
 
@@ -168,10 +170,12 @@ def from_order_notification(order: Order, total_sum):
         grouped_order_items[category.name] = order_items_by_category
     counter = 0
     for oi in order_items:
+        dish = oi.dish
+        dish_name = dish.get_full_name()
         counter += 1
         group_content = '\n'
         group_content += order_item_tmpl.format(counter=counter,
-                                               name=oi.dish.description,
+                                               name=dish_name,
                                                count=oi.count,
                                                price=_format_number(oi.dish.price),
                                                sum=_format_number(oi.dish.price * oi.count))

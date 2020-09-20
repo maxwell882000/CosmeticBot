@@ -46,7 +46,6 @@ class User(db.Model):
     cart = db.relationship('CartItem', lazy='dynamic', backref='user', cascade='all, delete-orphan')
     orders = db.relationship('Order', lazy='dynamic', backref='customer', cascade='all, delete-orphan')
     comments = db.relationship('Comment', lazy='dynamic', backref='author')
-    accept_policy = db.Column(db.Boolean, default=False)
 
     def _get_cart_item_for_dish(self, dish) -> CartItem:
         """
@@ -113,25 +112,25 @@ class DishCategory(db.Model, BaseNestedSets):
     def get_nested_names(self):
         name = self.name
         if self.parent:
-            name = self.parent.name + ' ' + name
+            name = self.parent.name + ' | ' + name
             if self.parent.parent:
-                name = self.parent.parent.name + ' ' + name
+                name = self.parent.parent.name + ' | ' + name
                 if self.parent.parent.parent:
-                    name = self.parent.parent.parent.name + ' ' + name
+                    name = self.parent.parent.parent.name + ' | ' + name
                     if self.parent.parent.parent.parent:
-                        name = self.parent.parent.parent.parent.name + ' ' + name
+                        name = self.parent.parent.parent.parent.name + ' | ' + name
         return name
 
     def get_nested_names_uz(self):
         name = self.name_uz
         if self.parent:
-            name = self.parent.name_uz + ' ' + name
+            name = self.parent.name_uz + ' | ' + name
             if self.parent.parent:
-                name = self.parent.parent.name_uz + ' ' + name
+                name = self.parent.parent.name_uz + ' | ' + name
                 if self.parent.parent.parent:
-                    name = self.parent.parent.parent.name_uz + ' ' + name
+                    name = self.parent.parent.parent.name_uz + ' | ' + name
                     if self.parent.parent.parent.parent:
-                        name = self.parent.parent.parent.parent.name + ' ' + name
+                        name = self.parent.parent.parent.parent.name + ' | ' + name
         return name
 
 
@@ -155,10 +154,21 @@ class Dish(db.Model):
     quantity = db.Column(db.String(100), default=0)
 
     def get_full_name(self):
-        return self.category.get_nested_names() + ' ' + self.name
+        return self.category.get_nested_names() + ' | ' + self.name
 
     def get_full_name_uz(self):
-        return self.category.get_nested_names_uz() + ' ' + self.name_uz
+        return self.category.get_nested_names_uz() + ' | ' + self.name_uz
+
+
+class Stats(db.Model):
+    """
+    Model for dishes
+    """
+    __tablename__ = 'stats'
+    id = db.Column(db.Integer, primary_key=True)
+    dish_id = db.Column(db.Integer)
+    dish_name = db.Column(db.String(100))
+    count = db.Column(db.Integer, default=0)
 
 
 class Order(db.Model):

@@ -1,0 +1,23 @@
+{% extends 'layouts/admin.html' %}
+{% block header %}Статистика{% endblock %}
+{% block description %}CosmeticBot{% endblock %}
+{% block breadcrumbs %}
+    <li class="active">Статистика</li>
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    {% for dish in dish_stat %}
+                        <b>{{ dish.dish_name }} == {{ dish.count }}</b>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script src="https://api-maps.yandex.ru/2.1/?load=package.full&apikey=4d16304f-12ba-4134-ac9b-f0da5028a1f4&lang=ru_RU" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+{% endblock %}
