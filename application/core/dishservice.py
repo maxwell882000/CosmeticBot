@@ -200,5 +200,5 @@ def set_category_image_id(category: DishCategory, image_id: str):
 
 
 def get_dish_and_count():
-    dish_and_count = Dish.query.order_by(Dish.quantity.asc()).all()
+    dish_and_count = Dish.query.order_by(Dish.description.asc()).all()
     return dish_and_count

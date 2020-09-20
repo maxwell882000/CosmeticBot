@@ -22,12 +22,9 @@ def view_context_processor():
 def index():
     order_statistic = get_order_yesterday_today_statistic()
     user_statistic = get_bot_users_yesterday_today_statistic()
-    #get_dish_count = get_dish_and_count()
-    #for cart_item in get_dish_count:
-    #    dish_name = cart_item.get_full_name()
+    get_dish_count = get_dish_and_count()
     return render_template('admin/index.html', yesterday_orders=order_statistic[0],
                            today_orders=order_statistic[1],
                            yesterday_users=user_statistic[0],
-                           today_users=user_statistic[1])
-                           #get_dish_count=get_dish_count,
-                           #get_full_name=dish_name)
+                           today_users=user_statistic[1],
+                           get_dish_count=get_dish_count)

@@ -56,6 +56,10 @@ class DishForm(FlaskForm):
         if float(field.data) <= 0:
             raise ValidationError('Цена не может быть отрицательной или равной нулю')
 
+    def validate_the_length(self, field):
+        if len(field.data) >= 100:
+            raise ValidationError('Цена не может быть отрицательной или равной нулю')
+
 
 class AdministratorEmailForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired('Укажите e-mail')])
@@ -135,8 +139,8 @@ class CafeLocationForm(FlaskForm):
 
     def fill_from_settings(self):
         coordinates = settings.get_cafe_coordinates()
-        self.latitude.data = coordinates[0]
-        self.longitude.data = coordinates[1]
+        self.latitude.data = 1
+        self.longitude.data = 1
 
 
 class TimeSet(FlaskForm):
