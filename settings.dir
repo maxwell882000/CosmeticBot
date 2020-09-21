@@ -1,4 +1,0 @@
-'currency_value', (0, 6)
-'delivery_cost', (512, 12)
-'limit_delivery_price', (1024, 6)
-'limit_delivery_km', (1536, 5)

@@ -60,7 +60,7 @@ def edit_category(category_id: int):
 def create_category():
     form = CategoryForm()
     all_categories = dishservice.get_all_categories()
-    form.parent.choices = [(c.id, '{} | {}'.format(c.name, c.name_uz)) for c in all_categories]
+    form.parent.choices = [(c.id, '{} || {}'.format(c.get_nested_names(), c.name_uz)) for c in all_categories]
     form.parent.choices.insert(0, (0, 'Нет'))
     if form.validate_on_submit():
         name_ru = form.name_ru.data
@@ -87,7 +87,8 @@ def remove_category(category_id: int):
 def create_dish():
     form = DishForm()
     all_categories = dishservice.get_all_categories()
-    form.category.choices = [(c.id, '{} | {}'.format(c.name, c.name_uz)) for c in all_categories]
+    form.category.choices = [(c.id, '{} || {}'.format(c.get_nested_names(), c.name_uz)) for c in all_categories]
+
     if form.validate_on_submit():
         name = form.name_ru.data
         name_uz = form.name_uz.data

@@ -56,9 +56,21 @@ class DishForm(FlaskForm):
         if float(field.data) <= 0:
             raise ValidationError('Цена не может быть отрицательной или равной нулю')
 
-    def validate_the_length(self, field):
-        if len(field.data) >= 100:
-            raise ValidationError('Цена не может быть отрицательной или равной нулю')
+    def validate_name_ru(self, field):
+        if len(field.data) > 100:
+            raise ValidationError('Длинна названия не может превышать 100 символов')
+
+    def validate_name_uz(self, field):
+        if len(field.data) > 100:
+            raise ValidationError('Длинна названия не может превышать 100 символов')
+
+    def validate_description_ru(self, field):
+        if len(field.data) > 500:
+            raise ValidationError('Длинна описания не может превышать 500 символов')
+
+    def validate_description_uz(self, field):
+        if len(field.data) > 500:
+            raise ValidationError('Длинна описания не может превышать 500 символов')
 
 
 class AdministratorEmailForm(FlaskForm):
