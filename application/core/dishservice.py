@@ -25,12 +25,11 @@ def get_category_by_id(category_id) -> DishCategory:
     return DishCategory.query.get_or_404(category_id)
 
 
-def update_category(category_id: int, name_ru: str, name_uz: str, parent_id=0, image=None):
+def update_category(category_id: int, name_ru: str, parent_id=0, image=None):
     if parent_id == 0:
         parent_id = None
     category = DishCategory.query.get_or_404(category_id)
     category.name = name_ru
-    category.name_uz = name_uz
     category.parent_id = parent_id
     if image and image.filename != '':
         if category.image_path:
