@@ -139,7 +139,7 @@ class Dish(db.Model):
     quantity = db.Column(db.Integer, default=0)
 
     def get_full_name(self):
-        return self.category.get_nested_names() + ' | ' + self.name
+        return self.category.get_nested_names() + ' |=>| ' + self.name
 
 
 class Stats(db.Model):
