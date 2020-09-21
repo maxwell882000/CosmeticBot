@@ -17,7 +17,6 @@ class CategoryForm(FlaskForm):
     submit = SubmitField('Сохранить')
     def fill_from_object(self, category: DishCategory):
         self.name_ru.data = category.name
-        self.name_uz.data = category.name_uz
         if category.parent:
             self.parent.data = category.parent_id
 
