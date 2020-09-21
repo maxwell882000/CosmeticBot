@@ -39,14 +39,6 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 col-sm-12">
-                                <div class="form-group {% if form.price.errors|length > 0 %}has-error{% endif %}">
-                                    {{ form.price(class='form-control', placeholder=form.price.label.text) }}
-                                    {% for error in form.price.errors %}
-                                        <span class="help-block">{{ error }}</span>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-sm-12">
                                 <div class="form-group {% if form.category.errors|length > 0 %}has-error{% endif %}">
                                     {{ form.category.label }}
                                     {{ form.category(class='form-control') }}
@@ -57,13 +49,22 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-12">
-                                <div class="form-group">
-                                    {{ form.image.label }}
-                                    {{ form.image }}
+                            <div class="col-sm-12">
+                                <div class="form-group {% if form.quantity.errors|length > 0 %}has-error{% endif %}">
+                                    {{ form.quantity(class='form-control', placeholder=form.quantity.label.text) }}
+                                    {% for error in form.quantity.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
                                 </div>
                             </div>
-
+                            <div class="col-md-6 col-sm-12">
+                                <div class="form-group {% if form.price.errors|length > 0 %}has-error{% endif %}">
+                                    {{ form.price(class='form-control', placeholder=form.price.label.text) }}
+                                    {% for error in form.price.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
                             <div class="col-sm-12">
                                 <div class="checkbox">
                                     <label>
@@ -71,12 +72,12 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="col-sm-12">
-                                <div class="form-group {% if form.quantity.errors|length > 0 %}has-error{% endif %}">
-                                    {{ form.quantity(class='form-control', placeholder=form.quantity.label.text) }}
-                                    {% for error in form.quantity.errors %}
-                                        <span class="help-block">{{ error }}</span>
-                                    {% endfor %}
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    {{ form.image.label }}
+                                    {{ form.image }}
                                 </div>
                             </div>
                         </div>

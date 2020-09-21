@@ -10,7 +10,6 @@ from flask_login import current_user
 
 class CategoryForm(FlaskForm):
     name_ru = StringField('Название на русском', validators=[DataRequired('Укажите название категории на русском')])
-    name_uz = StringField('Название на узбекском', validators=[DataRequired('Укажите название категории на узбексокм')])
     image = FileField('Изображение',
                       validators=[FileAllowed(['png', 'jpg'],
                                               message='Разрешены только изображения форматов .jpg, .png')])
@@ -25,9 +24,7 @@ class CategoryForm(FlaskForm):
 
 class DishForm(FlaskForm):
     name_ru = StringField('Название на русском', validators=[DataRequired('Укажите название блюда на русском')])
-    name_uz = StringField('Название на узбекском', validators=[DataRequired('Укажите название блюда на узбексокм')])
     description_ru = TextAreaField('Описание товара на русском')
-    description_uz = TextAreaField('Описание товара на узбекском')
     category = SelectField('Категория', validators=[DataRequired('Укажите категорию')], coerce=int)
     price = StringField('Цена', validators=[DataRequired('Укажите цену')])
     image = FileField('Изображение',
@@ -40,8 +37,6 @@ class DishForm(FlaskForm):
 
     def fill_from_object(self, dish: Dish):
         self.name_ru.data = dish.name
-        self.name_uz.data = dish.name_uz
-        self.description_uz.data = dish.description_uz
         self.description_ru.data = dish.description
         self.category.data = dish.category_id
         self.price.data = dish.price
@@ -60,15 +55,7 @@ class DishForm(FlaskForm):
         if len(field.data) > 100:
             raise ValidationError('Длинна названия не может превышать 100 символов')
 
-    def validate_name_uz(self, field):
-        if len(field.data) > 100:
-            raise ValidationError('Длинна названия не может превышать 100 символов')
-
     def validate_description_ru(self, field):
-        if len(field.data) > 500:
-            raise ValidationError('Длинна описания не может превышать 500 символов')
-
-    def validate_description_uz(self, field):
         if len(field.data) > 500:
             raise ValidationError('Длинна описания не может превышать 500 символов')
 

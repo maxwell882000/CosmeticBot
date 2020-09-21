@@ -27,15 +27,6 @@
                                     {% endfor %}
                                 </div>
                             </div>
-                            <div class="col-md-6 col-sm-12">
-                                <div class="form-group {% if form.name_uz.errors|length > 0 %}has-error{% endif %}">
-                                    {{ form.name_uz.label }}
-                                    {{ form.name_uz(class='form-control', placeholder=form.name_uz.label.text) }}
-                                    {% for error in form.name_uz.errors %}
-                                        <span class="help-block">{{ error }}</span>
-                                    {% endfor %}
-                                </div>
-                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 col-sm-12">
@@ -43,15 +34,6 @@
                                     {{ form.description_ru.label }}
                                     {{ form.description_ru(class='form-control', placeholder=form.description_ru.label.text) }}
                                     {% for error in form.description_ru.errors %}
-                                        <span class="help-block">{{ error }}</span>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-sm-12">
-                                <div class="form-group {% if form.description_uz.errors|length > 0 %}has-error{% endif %}">
-                                    {{ form.description_uz.label }}
-                                    {{ form.description_uz(class='form-control', placeholder=form.description_uz.label.text) }}
-                                    {% for error in form.description_uz.errors %}
                                         <span class="help-block">{{ error }}</span>
                                     {% endfor %}
                                 </div>
