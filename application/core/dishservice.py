@@ -29,7 +29,7 @@ def update_category(category_id: int, name_ru: str, parent_id=0, image=None):
     if parent_id == 0:
         parent_id = None
     category = DishCategory.query.get_or_404(category_id)
-    category.name = name_ru
+    category.name = str.strip(name_ru)
     category.parent_id = parent_id
     if image and image.filename != '':
         if category.image_path:
@@ -45,7 +45,7 @@ def update_category(category_id: int, name_ru: str, parent_id=0, image=None):
 def create_category(name_ru: str, parent_id=0, image=None) -> DishCategory:
     if parent_id == 0:
         parent_id = None
-    category = DishCategory(name=name_ru, parent_id=parent_id)
+    category = DishCategory(name=str.strip(name_ru), parent_id=parent_id)
     if image and image.filename != '':
         file_path = os.path.join(Config.UPLOAD_DIRECTORY, image.filename)
         files.save_file(image, file_path, recreate=True)
@@ -67,8 +67,8 @@ def create_dish(name, description, image, price, quantity, category_id, show_usd
     elif quantity == check_quantity:
         check_quantity = 0
 
-    dish = Dish(name=name,
-                description=description,
+    dish = Dish(name=str.strip(name),
+                description=str.strip(description),
                 price=price, quantity=check_quantity, category_id=category_id, show_usd=show_usd)
     if type(image) is str and image != '':
         file_path = os.path.join(Config.UPLOAD_DIRECTORY, image)
@@ -84,8 +84,8 @@ def create_dish(name, description, image, price, quantity, category_id, show_usd
 
 def update_dish(dish_id, name, description, image, price, category_id, delete_image, show_usd, quantity):
     dish = get_dish_by_id(dish_id)
-    dish.name = name
-    dish.description = description
+    dish.name = str.strip(name)
+    dish.description = str.strip(description)
     dish.price = price
     dish.show_usd = show_usd
     dish.category_id = category_id
