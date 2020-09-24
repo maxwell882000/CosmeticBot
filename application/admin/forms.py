@@ -137,8 +137,8 @@ class CafeLocationForm(FlaskForm):
 
     def fill_from_settings(self):
         coordinates = settings.get_cafe_coordinates()
-        self.latitude.data = 1
-        self.longitude.data = 1
+        self.latitude.data = coordinates[0]
+        self.longitude.data = coordinates[1]
 
 
 class TimeSet(FlaskForm):
