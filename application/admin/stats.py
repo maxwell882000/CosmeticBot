@@ -8,5 +8,5 @@ from .forms import DeliveryPriceForm, CafeLocationForm
 @bp.route('/stats', methods=['GET'])
 @login_required
 def stats():
-	dish_stat = Stats.query.all()
+	dish_stat = Stats.query.order_by(Stats.count.desc()).all()
 	return render_template('admin/stats.html', title='Статистика', area='stats', dish_stat=dish_stat)

@@ -185,10 +185,14 @@ def reduce_dish_count(user_id):
         dish_in_cart.quantity = dish_in_cart.quantity - cart_item.count
 
         filter_stats_id = Stats.query.filter(Stats.dish_id == cart_item.dish.id).all()
+        current_stats = Stats.query.filter(Stats.dish_name == cart_item.dish.name).first()
+
         if len(filter_stats_id) == 0:
             stats = Stats(dish_id=cart_item.dish.id, dish_name=cart_item.dish.name, count=cart_item.count)
             db.session.add(stats)
         elif len(filter_stats_id) > 0:
+            print(filter_stats_id.count, cart_item.count)
             stats = Stats(dish_id=cart_item.dish.id, dish_name=cart_item.dish.name, count=cart_item.count)
-            db.session.add(stats)
+            current_stats.count += stats.count
+            db.session.add(current_stats)
     db.session.commit()
