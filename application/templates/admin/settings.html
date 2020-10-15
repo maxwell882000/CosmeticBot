@@ -71,7 +71,7 @@
                             <div class="col-md-6 col-sm-12">
                                 <div class="form-group {% if location_form.latitude.errors|length > 0 %}has_error{% endif %}">
                                     {{ location_form.latitude.label }}
-                                    {{ location_form.latitude(readonly='readonly') }}
+                                    {{ location_form.latitude }}
                                     {% for error in location_form.latitude.errors %}
                                         <span class="help-block">{{ error }}</span>
                                     {% endfor %}
@@ -80,7 +80,7 @@
                             <div class="col-md-6 col-sm-12">
                                 <div class="form-group {% if location_form.longitude.errors|length > 0 %}has_error{% endif %}">
                                     {{ location_form.longitude.label }}
-                                    {{ location_form.longitude(readonly='readonly') }}
+                                    {{ location_form.longitude }}
                                     {% for error in location_form.longitude.errors %}
                                         <span class="help-block">{{ error }}</span>
                                     {% endfor %}
