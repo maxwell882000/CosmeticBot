@@ -1,5 +1,0 @@
-'delivery_cost', (0, 12)
-'limit_delivery_price', (512, 6)
-'limit_delivery_km', (1024, 5)
-'currency_value', (1536, 6)
-'cafe_coordinates', (2048, 24)
